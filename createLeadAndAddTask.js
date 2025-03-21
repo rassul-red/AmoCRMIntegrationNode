@@ -63,11 +63,11 @@ const start = async () => {
     
     console.log('Tasks for lead:', JSON.stringify(tasks, null, 2));
     
-    // Fetch users
-    const usersResponse = await amoApiClient.getUsers();
-    console.log('Users:', JSON.stringify(usersResponse, null, 2));
+    // // Fetch users
+    // const usersResponse = await amoApiClient.getUsers();
+    // console.log('Users:', JSON.stringify(usersResponse, null, 2));
     
-    console.log('Process completed successfully!');
+    // console.log('Process completed successfully!');
     
   } catch (err) {
     // Handle any errors that occur

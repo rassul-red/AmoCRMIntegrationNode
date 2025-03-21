@@ -1,5 +1,5 @@
 // const {AmoApiClient} = require('@mobilon/amotop');
-const {AmoApiClient} = require('./node_modules/@mobilon-dev/amotop');
+const {AmoApiClient} = require('@mobilon-dev/amotop');
 
 const {domain, accessToken, debug} = require('./_config.sample');
 

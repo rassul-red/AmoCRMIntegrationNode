@@ -1,0 +1,7 @@
+    // // Fetch users
+    // const usersResponse = await amoApiClient.getUsers();
+    // console.log('Users:', JSON.stringify(usersResponse, null, 2));
+    
+    // console.log('Process completed successfully!');
+
+    
