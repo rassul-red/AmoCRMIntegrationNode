@@ -79,7 +79,7 @@ async function addAiNameToContact(contactId, aiName) {
 // Example usage
 const start = async () => {
   try {
-    const contactId = 68563616; // Replace with your actual contact ID
+    const contactId = 68535686; // Replace with your actual contact ID
     const aiName = "Александр"; // The AI-generated name you want to set
     
     const result = await addAiNameToContact(contactId, aiName);
