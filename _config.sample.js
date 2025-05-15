@@ -1,1 +1,23 @@
 
+const debug = true;
+ 
+const domain = 'pejaney393.amocrm.ru';
+const accessToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjJkOTE0NzdmYjY4MDE4MjVjMzRkZGY2NDQ0NjU1YTczNTNlNTE3Y2FiZmU0Yzg0ZGIyZjFkMjgwMWQzN2NiMWJjODM3ODNhYzJhZjc3ZTIyIn0.eyJhdWQiOiIwNGZmZWU0Mi0wNjQzLTQ3ZDEtYWMyYy1jZGQ0YzI1ZWVkMzYiLCJqdGkiOiIyZDkxNDc3ZmI2ODAxODI1YzM0ZGRmNjQ0NDY1NWE3MzUzZTUxN2NhYmZlNGM4NGRiMmYxZDI4MDFkMzdjYjFiYzgzNzgzYWMyYWY3N2UyMiIsImlhdCI6MTc0NzMyMDU3NCwibmJmIjoxNzQ3MzIwNTc0LCJleHAiOjE5MDUwMzM2MDAsInN1YiI6IjEyNTA1NzIyIiwiZ3JhbnRfdHlwZSI6IiIsImFjY291bnRfaWQiOjMyNDI1MDMwLCJiYXNlX2RvbWFpbiI6ImFtb2NybS5ydSIsInZlcnNpb24iOjIsInNjb3BlcyI6WyJjcm0iLCJmaWxlcyIsImZpbGVzX2RlbGV0ZSIsIm5vdGlmaWNhdGlvbnMiLCJwdXNoX25vdGlmaWNhdGlvbnMiXSwiaGFzaF91dWlkIjoiNjBiZjZjMDMtZGFjOC00ZGU1LThhYmUtOGQ5NGY5MjkzM2UyIiwiYXBpX2RvbWFpbiI6ImFwaS1iLmFtb2NybS5ydSJ9.RlsG_xgVSxxLteMgpJGAo_VcSxo3LnkprPn66w7N4dJ0kUVHqNo2nM-wpaQdDs1e0Uuiumelk-cBI9jZPWdmWW2sI4hJeYGK-9yMPnfNocvrszYavL388jUyxqYas_R6sBHRMQMF_m3JXEIzH5lvLWSFfsVnXBGCoIDOOapAUcK39ooA9XUSHlWLl7zPNO8xhX_LgI-xGd1rBle18DQr4VIRRGA8wIYCk_l3ZtjxSqjjRi9Px7DrDOWK05JldyILaytxyt2VRsTUr0EvJlZ_J-L1Juy0lwQAQy6wjV4XqE3JVWvwAFzLNelcaWLkGSGC5XpCmPEd1cA8NjKdWZ9MbQ';
+
+const scopeId = 'scopeId';
+
+const channelId = '';
+const channelSecret = '';
+const channelBotId = '';
+
+const amojoUserId = '';
+
+module.exports = {
+  domain,
+  accessToken,
+  scopeId,
+  debug,
+  channelSecret,
+  channelBotId,
+  amojoUserId,
+}

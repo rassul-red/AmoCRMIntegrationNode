@@ -13,8 +13,8 @@ const start = async () => {
       name: "vasya", 
       price: 5000,
        
-      pipeline_id: 9346766, 
-      status_id: 74922150,
+      pipeline_id: 9615982, 
+      status_id: 76755566,
       
       // Adding contact information with phone number
       _embedded: {

@@ -50,7 +50,7 @@ async function createTaskForLead(
   leadId, 
   taskText = "Заполнить карточку", 
   hoursDeadline = 24,
-  responsibleUserId = 12262602,
+  responsibleUserId = 12505722,
   taskTypeId = 1
 ) {
   try {
@@ -155,10 +155,10 @@ async function getActiveDealsForContact(contactId) {
  * @returns {Promise<{leadId: number, contactId: number, isNewContact: boolean}>}
  */
 async function createLeadWithPhone(
-  phoneNumber = "",
-  contactName = "",
-  pipelineId = 9346766,
-  statusId = 74922150,
+  phoneNumber = "+77748394343",
+  contactName = "Dasd",
+  pipelineId = 9615982,
+  statusId = 76755566,
   taskText = "Follow up with client about the proposal",
   taskHoursDeadline = 24
 ) {
@@ -213,22 +213,62 @@ async function createLeadWithPhone(
     if (!existingContactId) {
       console.log('No existing contact found with this phone number. Creating a new contact...');
       
+      // Dynamically fetch custom field IDs
+      let phoneFieldId;
+      let phoneEnumId;
+      try {
+        const customFields = await amoApiClient.getContactsCustomFields();
+        // console.log('Custom Fields:', JSON.stringify(customFields, null, 2)); // For debugging
+        const phoneField = customFields?._embedded?.custom_fields?.find(
+          (field) => field.code === "PHONE" || field.name === "Телефон"
+        );
+
+        if (phoneField) {
+          phoneFieldId = phoneField.id;
+          const mobEnum = phoneField.enums?.find(
+            (e) => e.code === "MOB" || e.value === "MOB" // Some APIs might use value
+          );
+          if (mobEnum) {
+            phoneEnumId = mobEnum.id;
+          } else {
+            // Fallback: try to find a common mobile enum name if code MOB is not present
+            const commonMobileEnums = ["мобильный", "mobile", "моб."];
+            const foundEnum = phoneField.enums?.find(e => commonMobileEnums.some(name => e.value.toLowerCase().includes(name)));
+            if (foundEnum) {
+                phoneEnumId = foundEnum.id;
+                console.log(`Used fallback to find mobile enum: ${foundEnum.value} (ID: ${phoneEnumId})`);
+            } else {
+                 console.warn('Could not find "MOB" enum for the phone field. Will attempt to add phone without enum_id.');
+            }
+          }
+        } else {
+          throw new Error('Could not find the "PHONE" custom field.');
+        }
+      } catch (fieldError) {
+        console.error("Error fetching or processing custom fields:", fieldError);
+        throw new Error(`Failed to get custom field IDs for phone: ${fieldError.message}`);
+      }
+
+      if (!phoneFieldId) {
+        throw new Error('Failed to determine phoneFieldId.');
+      }
+      
       const contactData = {
         name: contactName,
         custom_fields_values: [
           {
-            field_id: 3001152, // Phone field ID from getContactsCustomFields
-            field_name: "Телефон",
+            field_id: phoneFieldId,
+            field_name: "Телефон", // This is often ignored by API if field_id is correct
             values: [
-              {
-                value: normalizedPhone, // Use normalized phone with +7
-                enum_id: 4678870, // MOB enum ID from getContactsCustomFields
-                enum_code: "MOB"
-              }
+              phoneEnumId 
+                ? { value: normalizedPhone, enum_id: phoneEnumId, enum_code: "MOB" }
+                : { value: normalizedPhone } // Send without enum if not found
             ]
           }
         ]
       };
+      
+      console.log('Contact data being sent:', JSON.stringify(contactData, null, 2));
       
       const contactResponse = await amoApiClient.addContact(contactData);
       contactId = contactResponse._embedded?.contacts[0]?.id;
@@ -313,9 +353,9 @@ const start = async () => {
     // Use the parameters explicitly
     await createLeadWithPhone(
       "+77718282312",   // Phone number
-      "",               // Contact name
-      9346766,          // Pipeline ID
-      74922150,         // Status ID
+      "ASD",               // Contact name
+      9615982,          // Pipeline ID
+      76755566,         // Status ID
       "Follow up with client about the proposal", // Task text
       24                // Task hours deadline
     );
