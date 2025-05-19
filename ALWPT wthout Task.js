@@ -38,49 +38,6 @@ function normalizePhoneForSearch(phoneNumber) {
 }
 
 /**
- * Creates a task for a lead
- * @param {number} leadId - The lead ID to create task for
- * @param {string} taskText - The text for the task
- * @param {number} hoursDeadline - Hours from now for the deadline
- * @param {number} responsibleUserId - User ID responsible for the task
- * @param {number} taskTypeId - Type ID for the task
- * @returns {Promise<any>} Created task response
- */
-async function createTaskForLead(
-  leadId, 
-  taskText = "Заполнить карточку", 
-  hoursDeadline = 24,
-  responsibleUserId = 12262602,
-  taskTypeId = 1
-) {
-  try {
-    console.log(`Creating task for lead ID: ${leadId}`);
-    
-    // Calculate timestamp for deadline hours from now
-    const deadline = new Date();
-    deadline.setHours(deadline.getHours() + hoursDeadline);
-    
-    const task = [{
-      text: taskText,
-      complete_till: Math.floor(deadline.getTime() / 1000), // Unix timestamp
-      entity_id: leadId,
-      entity_type: "leads",
-      task_type_id: taskTypeId,
-      responsible_user_id: responsibleUserId
-    }];
-    
-    console.log('Task payload:', JSON.stringify(task, null, 2));
-    const taskResponse = await amoApiClient.addTask(task);
-    console.log(`Task created for lead ID ${leadId}`);
-    
-    return taskResponse;
-  } catch (err) {
-    console.error('Error creating task:', err);
-    throw err;
-  }
-}
-
-/**
  * Checks if a contact has any active deals
  * @param {number} contactId - The contact ID to check
  * @returns {Promise<Array>} Array of active deals
@@ -150,17 +107,13 @@ async function getActiveDealsForContact(contactId) {
  * @param {string} contactName - The name to use for the contact if a new one is created
  * @param {number} pipelineId - The pipeline ID
  * @param {number} statusId - The status ID
- * @param {string} taskText - Text for the task
- * @param {number} taskHoursDeadline - Hours until task deadline
  * @returns {Promise<{leadId: number, contactId: number, isNewContact: boolean}>}
  */
 async function createLeadWithPhone(
   phoneNumber = "",
   contactName = "",
   pipelineId = 9346766,
-  statusId = 74922150,
-  taskText = "Follow up with client about the proposal",
-  taskHoursDeadline = 24
+  statusId = 74922150
 ) {
   // Normalize phone number for storage
   const normalizedPhone = normalizePhoneNumber(phoneNumber);
@@ -217,12 +170,11 @@ async function createLeadWithPhone(
         name: contactName,
         custom_fields_values: [
           {
-            field_id: 3001152, // Phone field ID from getContactsCustomFields
+            field_code: "PHONE", // Phone field ID from getContactsCustomFields
             field_name: "Телефон",
             values: [
               {
                 value: normalizedPhone, // Use normalized phone with +7
-                enum_id: 4678870, // MOB enum ID from getContactsCustomFields
                 enum_code: "MOB"
               }
             ]
@@ -249,17 +201,14 @@ async function createLeadWithPhone(
       const activeDeals = await getActiveDealsForContact(contactId);
       
       if (activeDeals.length > 0) {
-        console.log('Found active deals with this contact, will create task for first active deal.');
-        // Create task for the first active deal
+        console.log('Found active deals with this contact.');
         leadId = activeDeals[0].id;
-        await createTaskForLead(leadId, taskText, taskHoursDeadline);
         
         return {
           leadId,
           contactId,
           isNewContact: false,
-          activeDeals,
-          taskCreated: true
+          activeDeals
         };
       }
     }
@@ -287,17 +236,13 @@ async function createLeadWithPhone(
     
     console.log(`Lead created with ID: ${leadId}`);
     
-    // Step 3: Create a task for the lead
-    await createTaskForLead(leadId, taskText, taskHoursDeadline);
-    
-    console.log(`Success! Lead created with ${isNewContact ? 'new' : 'existing'} contact that has a phone number and task added.`);
+    console.log(`Success! Lead created with ${isNewContact ? 'new' : 'existing'} contact that has a phone number.`);
     
     return {
       leadId,
       contactId,
       isNewContact,
-      activeDeals: [],
-      taskCreated: true
+      activeDeals: []
     };
   } catch (err) {
     const errMessage = err.response?.data ? JSON.stringify(err.response.data, null, 2) : err;
@@ -312,15 +257,13 @@ const start = async () => {
   try {
     // Use the parameters explicitly
     await createLeadWithPhone(
-      "+77718282312",   // Phone number
-      "",               // Contact name
-      9346766,          // Pipeline ID
-      74922150,         // Status ID
-      "Follow up with client about the proposal", // Task text
-      24                // Task hours deadline
+      "+77746282312",   // Phone number
+      "sSSSasaws",      // Contact name
+      9615982,          // Pipeline ID
+      76755566          // Status ID
     );
   } catch (err) {
-    console.error('Failed to create lead or task:', err);
+    console.error('Failed to create lead:', err);
   }
 };
 

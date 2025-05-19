@@ -11,7 +11,7 @@ const start = async () => {
   try {
     // Define the lead ID to which we want to add a note
     // Replace this with an actual lead ID from your amoCRM account
-    const leadId = 38629140;
+    const leadId = 44403601;
     
     console.log(`Adding a note to lead ID: ${leadId}`);
     
